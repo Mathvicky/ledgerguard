@@ -1,0 +1,5 @@
+id,vendor,reference,amount,currency,date
+PAY-1,Atlas Cloud,AT-2001,800.00,GBP,2026-09-10
+PAY-2,Atlas Cloud,AT-2001,200.00,GBP,2026-09-11
+PAY-3,Beacon Services,BC-9011,950.00,GBP,2026-09-12
+PAY-4,Cedar Studio,CD-4001,300.00,GBP,2026-09-12

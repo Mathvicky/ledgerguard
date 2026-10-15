@@ -1,0 +1,15 @@
+services:
+  ledgerguard:
+    build: .
+    ports: ["127.0.0.1:8091:8091"]
+    volumes: ["ledgerguard:/data"]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8091/health')"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+volumes:
+  ledgerguard:

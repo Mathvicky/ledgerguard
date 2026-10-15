@@ -1,0 +1,8 @@
+const test=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const path=require('node:path');const {reconcile,parse,near}=require('../web/engine.js');const samples=Object.fromEntries(['invoices','payments','statements'].map(k=>[k,fs.readFileSync(path.join(__dirname,'../samples/'+k+'.csv'),'utf8')]));
+test('five known findings, integer money and clean control',()=>{const r=reconcile(samples);assert.equal(r.cases.length,5);assert.deepEqual(Object.fromEntries(r.cases.map(c=>[c.kind,c.amount_minor])),{possible_duplicate:120000,unmatched_payment:95000,missing_invoice:42500,overpayment:20000,statement_difference:5000});assert.ok(r.cases.every(c=>!c.records.includes('INV-5')));});
+test('quoted fields',()=>assert.equal(parse(samples.invoices.replace('Atlas Cloud','"Atlas, Cloud"'),'invoices')[2].vendor,'Atlas, Cloud'));
+test('invalid amounts rejected',()=>{for(const amount of ['NaN','1.001','0','-1','1e3'])assert.throws(()=>parse(samples.invoices.replace('1200.00',amount),'invoices'));});
+test('currency isolation',()=>{const r=reconcile({...samples,payments:samples.payments.replaceAll('GBP','EUR')});assert.ok(!r.cases.some(c=>c.kind==='overpayment'));});
+test('bounded similarity',()=>{assert.ok(near('inv1234','inv123a'));assert.ok(!near('inv1234','inv12ab'));});
+
+test('Python and JS produce identical synthetic results',()=>{const {spawnSync}=require('node:child_process');const code="import sys,json; from ledgerguard.engine import reconcile; print(json.dumps(reconcile(json.load(sys.stdin))))";const r=spawnSync('python',['-c',code],{cwd:path.join(__dirname,'..'),input:JSON.stringify(samples),encoding:'utf8'});assert.equal(r.status,0,r.stderr);assert.deepEqual(reconcile(samples),JSON.parse(r.stdout));});

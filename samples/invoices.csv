@@ -1,0 +1,6 @@
+id,vendor,reference,amount,currency,date
+INV-1,Northstar Supplies,NS-1001,1200.00,GBP,2026-09-01
+INV-2,Northstar Supplies,NS-100I,1200.00,GBP,2026-09-02
+INV-3,Atlas Cloud,AT-2001,800.00,GBP,2026-09-03
+INV-4,Orchid Logistics,OR-3001,540.00,GBP,2026-09-04
+INV-5,Cedar Studio,CD-4001,300.00,GBP,2026-09-05

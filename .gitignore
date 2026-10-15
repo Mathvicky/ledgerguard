@@ -1,0 +1,8 @@
+*.db
+*.db-*
+__pycache__/
+.test-work/
+.terraform/
+*.tfstate*
+*.tfplan
+*.tfvars
